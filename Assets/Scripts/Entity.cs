@@ -18,7 +18,10 @@ public class Entity : MonoBehaviour
 
 
     public float MaxHp => maxHP; 
-    public float CurrentHp => currentHP; 
+    public float CurrentHp => currentHP;
+    public float Dmg => DMG;
+    public float Def => DEF;
+    public float Speed => SPEED;
 
     [Header("Collision")]
     [SerializeField] private bool ObstacleDetection;
@@ -89,5 +92,26 @@ public class Entity : MonoBehaviour
     {
 
         if (attackPoint != null) Gizmos.DrawWireSphere(attackPoint.position, attackRadious);
+    }
+
+
+
+    public void SetStats(float newMaxHp, float newDmg, float newSpeed, float newDef)
+    {
+        maxHP = newMaxHp;
+        DMG = newDmg;
+        SPEED = newSpeed;
+        DEF = newDef;
+
+       
+        if (currentHP > maxHP)
+        {
+            currentHP = maxHP;
+        }
+    }
+
+    public void SetCurrentHp(float newHp)
+    {
+        currentHP = Mathf.Clamp(newHp, 0, maxHP);
     }
 }

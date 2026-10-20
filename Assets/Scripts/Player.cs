@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,9 +8,9 @@ using UnityEngine.InputSystem;
 public class Player : Entity
 {
     private Vector2 movementInput;
-       
 
-    
+    public PlayerClassHandler classHandler;
+
 
     //Dash
     [SerializeField] private float dashSpeed = 15f;
@@ -28,6 +29,8 @@ public class Player : Entity
     protected bool facingRight = true;
 
     private Vector2 lastNonZeroMovement = Vector2.down;
+
+    
 
     protected override void Update()
     {   
@@ -88,6 +91,29 @@ public class Player : Entity
         {
             HandleAttack();
 
+        }
+
+
+        if (Keyboard.current.qKey.isPressed)
+        {
+            CastSpell(0);
+        }
+
+        if (Keyboard.current.eKey.isPressed)
+        {
+            CastSpell(0);
+        }
+    }
+
+    private void CastSpell(int slotIndex)
+    {
+        if (classHandler != null && slotIndex < classHandler.equippedSpells.Count)
+        {
+            SpellData spellToCast = classHandler.equippedSpells[slotIndex];
+            if (spellToCast != null)
+            {
+                spellToCast.Cast(transform);
+            }
         }
     }
 
