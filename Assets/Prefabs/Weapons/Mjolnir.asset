@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e35291379612d94fb3cc6ed51255922, type: 3}
   m_Name: Mjolnir
   m_EditorClassIdentifier: Assembly-CSharp::WeaponData
-  weaponName: 
+  weaponName: Mjolnir
   baseDMG: 5
   attackSpeed: 1.2
-  weaponPrefab: {fileID: 0}
+  weaponPrefab: {fileID: -2253911629886400664, guid: aea5dd361d645244da088e7d37a58c0e, type: 3}

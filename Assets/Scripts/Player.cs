@@ -37,7 +37,8 @@ public class Player : Entity
         
         base.Update();
         if (isDashing) return;
-        HandleInput();
+        //HandleInput();
+        
         HandleFlip();
     }
 
@@ -45,7 +46,7 @@ public class Player : Entity
     {
         if (isDashing || !canMove) return;
 
-        rb.linearVelocity = movementInput * SPEED;
+        HandleMovement();
     }
 
     //private void OnMove(InputValue value)
@@ -87,11 +88,7 @@ public class Player : Entity
             }
         }
 
-        if (Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            HandleAttack();
-
-        }
+       
 
 
         if (Keyboard.current.qKey.isPressed)
@@ -151,14 +148,40 @@ public class Player : Entity
         {
             rb.linearVelocity = movementInput * SPEED;
 
+            if (movementInput != Vector2.zero)
+            {
+                lastNonZeroMovement = movementInput;
+                anim.SetBool("IsWalking", false);
+                anim.SetFloat("InputX", movementInput.x);
+                anim.SetFloat("InputY", movementInput.y);
 
-            anim.SetBool("IsWalking", true);
-            anim.SetFloat("InputX", movementInput.x);
-            anim.SetFloat("InputY", movementInput.y);
+                
+                
+                anim.SetFloat("LastInputX", movementInput.x);
+                anim.SetFloat("LastInputY", movementInput.y);
+
+                UpdateAttackPointPosition();
+                
+            }
+            else
+            {
+                anim.SetBool("IsWalking", true);
+            }
         }
         else
         {
             rb.linearVelocity = Vector2.zero;
+            
+        }
+    }
+
+    protected void OnMove(InputValue value)
+    {
+        movementInput = value.Get<Vector2>();
+
+        if (movementInput == Vector2.zero)
+        {
+            anim.SetBool("IsWalking", false);
         }
     }
 
@@ -173,20 +196,25 @@ public class Player : Entity
         }
     }
 
-    protected virtual void HandleAttack()
-    {
-        canMove = false;
-        if (anim != null)
-        {
-            anim.SetTrigger("attack");
-            
-        }
-        DamageTargets();
-    }
+    
 
     public void EndAttack()
     {
         canMove = true;
+    }
+
+    protected void OnAttack(InputValue value)
+    {
+        if (value.isPressed)
+        {
+            canMove = false;
+            if (anim != null)
+            {
+                anim.SetTrigger("attack");
+
+            }
+            DamageTargets();
+        }
     }
 
 
