@@ -8,29 +8,44 @@ using UnityEngine.InputSystem;
 public class Player : Entity
 {
     private Vector2 movementInput;
+    
+    public float attackDuration = 0.5f;
 
+    [Header("Class")]
     public PlayerClassHandler classHandler;
+    
 
 
     //Dash
+    
     [SerializeField] private float dashSpeed = 15f;
     [SerializeField] private float dashDuration = 0.2f;
     [SerializeField] private float dashCooldown = 1f;
-
+	
     private bool isDashing;
 
     private bool canDash = true;
 
     private bool isAttacking;
 
-    public float attackDuration = 0.5f;
+    
 
     protected int facingDir = 1;
     protected bool facingRight = true;
 
     private Vector2 lastNonZeroMovement = Vector2.down;
 
+    protected override void Awake()
+    {
+    base.Awake();
     
+    classHandler = GetComponent<PlayerClassHandler>();
+    
+    if(classHandler == null){
+	Debug.LogError("Brak komponentu PlayerClassHandler na obiekcie gracza!");    
+    }
+    
+    }
 
     protected override void Update()
     {   
