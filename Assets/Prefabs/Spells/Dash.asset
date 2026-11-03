@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00775a64803dbf742a0d526102a0b57c, type: 3}
   m_Name: Dash
   m_EditorClassIdentifier: Assembly-CSharp::SpellData
-  spellName: 
+  spellName: Dash
   cooldown: 20
-  DMG: 40
+  DMG: 0
   allowedClasses: []
   spellIcon: {fileID: 0}
   projectileSprite: {fileID: 0}
-  spellType: 0
-  potency: 0
-  duration: 0
+  spellType: 1
+  potency: 15
+  duration: 0.2
