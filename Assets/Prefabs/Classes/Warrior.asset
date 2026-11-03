@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97931c820e52d074e8b30d01abb7d405, type: 3}
   m_Name: Warrior
   m_EditorClassIdentifier: Assembly-CSharp::CharacterClass
-  className: 
+  className: Warrior
   description: 
-  baseMaxHP: 0
-  baseDMG: 0
-  baseDEF: 0
-  baseSPEED: 0
+  baseMaxHP: 11
+  baseDMG: 2
+  baseDEF: 4
+  baseSPEED: 5
   allClassNodes: []
-  defaultWeapon: {fileID: 0}
+  defaultWeapon: {fileID: 11400000, guid: a4aab15d261d8bb4c8ab3d3d2eb5bb33, type: 2}
   defaultSpells: []
   maxSpellSlots: 2
