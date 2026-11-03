@@ -20,7 +20,7 @@ public class Player : Entity
     
     [SerializeField] private float dashSpeed = 15f;
     [SerializeField] private float dashDuration = 0.2f;
-    [SerializeField] private float dashCooldown = 1f;
+    
 	
     private bool isDashing;
 
@@ -93,40 +93,33 @@ public class Player : Entity
             UpdateAttackPointPosition();
         }
 
-        if (Keyboard.current.leftShiftKey.wasPressedThisFrame && movementInput != Vector2.zero && canDash) {
-
-            Debug.Log($"Kliknięto Shift! Czy canDash: {canDash}, Czy moveInput to zero: {movementInput == Vector2.zero}");
-
-            if (canDash && movementInput != Vector2.zero)
-            {
-                StartCoroutine(DashRoutine());
-            }
-        }
+        
 
        
 
 
-        if (Keyboard.current.qKey.isPressed)
-        {
-            CastSpell(0);
-        }
-
-        if (Keyboard.current.eKey.isPressed)
-        {
-            CastSpell(0);
-        }
+        
     }
 
-    private void CastSpell(int slotIndex)
+    
+
+    public IEnumerator DashRoutine(float potency, float duration)
     {
-        if (classHandler != null && slotIndex < classHandler.equippedSpells.Count)
-        {
-            SpellData spellToCast = classHandler.equippedSpells[slotIndex];
-            if (spellToCast != null)
-            {
-                spellToCast.Cast(transform);
-            }
-        }
+        canDash = false;
+        isDashing = true;
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), true);
+
+        Vector2 dashDirection = movementInput;
+        rb.linearVelocity = dashDirection * potency;
+
+        yield return new WaitForSeconds(duration);
+
+        rb.linearVelocity = Vector2.zero;
+        isDashing = false;
+
+        
+        canDash = true;
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), false);
     }
 
     private void UpdateAttackPointPosition()
@@ -137,24 +130,7 @@ public class Player : Entity
         }
     }
 
-    private IEnumerator DashRoutine()
-    {
-        canDash = false;
-        isDashing = true;
-        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), true);
-        Vector2 dashDirection = movementInput;
-
-        rb.linearVelocity = dashDirection * dashSpeed;
-
-        yield return new WaitForSeconds(dashDuration);
-
-        rb.linearVelocity = Vector2.zero;
-        isDashing = false;
-
-        yield return new WaitForSeconds(dashCooldown);
-        canDash = true;
-        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), false);
-    }
+    
 
     protected override void HandleMovement()
     {
@@ -229,6 +205,33 @@ public class Player : Entity
 
             }
             DamageTargets();
+        }
+    }
+
+    public void OnCastSpell_1(InputValue value)
+    {
+        if (value.isPressed) 
+        {
+            Debug.Log("Próba rzucenia czaru ze slotu 1");
+
+            if (classHandler != null)
+            {
+                classHandler.CastSpellFromSlot(0);
+            }
+        }
+    }
+
+    public void OnCastSpell_2(InputValue value)
+    {
+        if (value.isPressed) 
+        {
+            Debug.Log("Próba rzucenia czaru ze slotu 2");
+
+
+            if (classHandler != null)
+            {
+                classHandler.CastSpellFromSlot(1);
+            }
         }
     }
 

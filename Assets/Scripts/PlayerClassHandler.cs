@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System;
+using Unity.VisualScripting;
+using UnityEngine;
 
 public class PlayerClassHandler :MonoBehaviour
 {
+    private float[] spellCooldownTimers = new float[2];
 
     private Player player;
 
@@ -27,6 +30,14 @@ public class PlayerClassHandler :MonoBehaviour
         if (currentClass != null)
         {
             InitializeClass(currentClass);
+        }
+    }
+
+    private void Update()
+    {
+        for(int i = 0; i < spellCooldownTimers.Length; i++)
+        {
+            if (spellCooldownTimers[i]>0) spellCooldownTimers[i] -= Time.deltaTime;
         }
     }
 
@@ -135,5 +146,81 @@ public class PlayerClassHandler :MonoBehaviour
         }
 
         return false;
+    }
+
+
+    public void CastSpellFromSlot(int slotIndex)
+    {
+        if(slotIndex >= 0 && slotIndex < equippedSpells.Count)
+        {
+            SpellData spellToCast = equippedSpells[slotIndex];
+
+            if (spellToCast != null) 
+            {
+                if (spellCooldownTimers[slotIndex] <= 0)
+                {
+
+                    switch (spellToCast.spellType)
+                    {
+                        case SpellType.Projectile:
+                            CastProjectile(spellToCast);
+                            break;
+                        case SpellType.Dash:
+                            CastDash(spellToCast.potency, spellToCast.duration);
+                            break;
+                        case SpellType.Heal:
+                            ExecuteHeal(spellToCast.potency);
+                            break;
+                        case SpellType.Shield:
+                            ExecuteShield(spellToCast.duration);
+                            break;
+                        case SpellType.StunArea:
+                            ExecuteStun();
+                            break;
+                    }
+                    spellCooldownTimers[slotIndex] = spellToCast.cooldown;
+                }
+                else 
+                {
+                    Debug.Log($"Czar {spellToCast.spellName} jest jeszcze na cooldownie! Zostało: {spellCooldownTimers[slotIndex]:F1}s");
+                    return;
+                }
+            }
+            else
+            {
+                Debug.Log($"Slot {slotIndex +1} jest pusty!");
+            }
+
+        }
+        else
+        {
+            Debug.Log($"Brak przypisanego czaru w slocie {slotIndex + 1}!");
+        }
+    }
+
+    private void CastProjectile(SpellData spell)
+    {
+        Debug.Log($"Wystrzelono pocisk: {spell.spellName} z DMG: {spell.DMG}");
+    }
+
+    
+    public void CastDash(float potency, float duration)
+    {
+        StartCoroutine(player.DashRoutine(potency, duration));
+    }
+
+    private void ExecuteHeal(float potency)
+    {
+        Debug.Log($"Uleczono gracza o: {potency} HP");
+    }
+
+    private void ExecuteShield(float duration)
+    {
+        Debug.Log($"Aktywowano tarczę na czas: {duration}s");
+    }
+
+    private void ExecuteStun()
+    {
+        Debug.Log($"Wyzowlono obszarowy STUN wokół gracza!");
     }
 }

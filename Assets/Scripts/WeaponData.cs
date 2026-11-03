@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 [CreateAssetMenu(fileName = "NewWeapon", menuName = "System/Weapon")]
 public class WeaponData : ScriptableObject
@@ -7,6 +8,10 @@ public class WeaponData : ScriptableObject
     public float baseDMG = 5f;
     public float attackSpeed = 1.2f;
     public GameObject weaponPrefab;
+
+    [Header("Wymagania klas")]
+    [Tooltip("Lista klas, które mogą używać tego czaru. Jeśli lista jest pusta, każdy może go użyć.")]
+    public List<CharacterClass> allowedClasses = new List<CharacterClass>();
 
 
 }
