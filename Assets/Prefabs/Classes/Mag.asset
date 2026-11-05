@@ -20,5 +20,7 @@ MonoBehaviour:
   baseSPEED: 4
   allClassNodes: []
   defaultWeapon: {fileID: 0}
-  defaultSpells: []
+  defaultSpells:
+  - {fileID: 11400000, guid: f4b3bcbb81dfded47b2e33875b5ff7a5, type: 2}
+  - {fileID: 11400000, guid: f4ca2f2e2e1709a4a8a48d476f149c10, type: 2}
   maxSpellSlots: 2

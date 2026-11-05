@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Dash
   m_EditorClassIdentifier: Assembly-CSharp::SpellData
   spellName: Dash
-  cooldown: 20
+  cooldown: 5
   DMG: 0
   allowedClasses: []
   spellIcon: {fileID: 0}

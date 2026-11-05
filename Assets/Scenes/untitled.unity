@@ -735,11 +735,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b96c209b0f986f34d9cb03efc0eb839f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerClassHandler
-  currentClass: {fileID: 11400000, guid: 58323f8b2591d014cb7136a8c8c1e7ca, type: 2}
+  currentClass: {fileID: 11400000, guid: 0b0303f8492edb884baa88804384d995, type: 2}
   unlockedNodes: []
   availableSkillPoints: 0
   currentWeapon: {fileID: 0}
-  equippedSpells: []
+  equippedSpells:
+  - {fileID: 11400000, guid: f4b3bcbb81dfded47b2e33875b5ff7a5, type: 2}
+  - {fileID: 11400000, guid: f4ca2f2e2e1709a4a8a48d476f149c10, type: 2}
 --- !u!1 &697971588
 GameObject:
   m_ObjectHideFlags: 0
@@ -992,24 +994,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 878842539628421457, guid: 9244d52422c4d4041b66913909c7c449, type: 3}
+      propertyPath: m_Size.x
+      value: 0.22470021
+      objectReference: {fileID: 0}
+    - target: {fileID: 878842539628421457, guid: 9244d52422c4d4041b66913909c7c449, type: 3}
       propertyPath: m_Size.y
-      value: 0.2924528
+      value: 0.3076983
       objectReference: {fileID: 0}
     - target: {fileID: 878842539628421457, guid: 9244d52422c4d4041b66913909c7c449, type: 3}
       propertyPath: m_Offset.x
-      value: -0.016385246
+      value: 0.000688982
       objectReference: {fileID: 0}
     - target: {fileID: 878842539628421457, guid: 9244d52422c4d4041b66913909c7c449, type: 3}
       propertyPath: m_Offset.y
-      value: -0.23772164
+      value: -0.2464497
       objectReference: {fileID: 0}
     - target: {fileID: 2104132306954810195, guid: 9244d52422c4d4041b66913909c7c449, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.01
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2104132306954810195, guid: 9244d52422c4d4041b66913909c7c449, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.07
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2104132306954810195, guid: 9244d52422c4d4041b66913909c7c449, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1041,6 +1047,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2104132306954810195, guid: 9244d52422c4d4041b66913909c7c449, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3771121052563918383, guid: 9244d52422c4d4041b66913909c7c449, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3771121052563918383, guid: 9244d52422c4d4041b66913909c7c449, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6653855712787987845, guid: 9244d52422c4d4041b66913909c7c449, type: 3}
