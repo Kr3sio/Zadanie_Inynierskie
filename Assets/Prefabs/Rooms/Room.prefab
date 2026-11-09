@@ -658,6 +658,7 @@ MonoBehaviour:
   bottomDoorRenderer: {fileID: 2360524688583171199}
   leftDoorRenderer: {fileID: 8937989093757178097}
   rightDoorRenderer: {fileID: 2333769141748643156}
+  enemySpawner: {fileID: 0}
 --- !u!61 &9014378248004297714
 BoxCollider2D:
   m_ObjectHideFlags: 0
