@@ -13,6 +13,8 @@ public class CharacterClass : ScriptableObject
     [Header("Base Statistics")]
     public float baseMaxHP;
     public float baseDMG;
+
+    public float baseAttackSpeed;
     public float baseDEF;
     public float baseSPEED;
 

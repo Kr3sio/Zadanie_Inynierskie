@@ -16,6 +16,7 @@ MonoBehaviour:
   description: 
   baseMaxHP: 11
   baseDMG: 2
+  baseAttackSpeed: 1
   baseDEF: 3
   baseSPEED: 4
   allClassNodes: []

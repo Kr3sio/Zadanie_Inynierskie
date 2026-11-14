@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,7 +6,11 @@ public class NPCInteraction2D : MonoBehaviour
 {
     [Header("UI Panel")]
     [Tooltip("Przeciągnij tutaj panel UI sklepu lub kowala")]
-    public GameObject shopPanel;
+    public GameObject Panel;
+
+    private Player player;
+
+    private Animator playerAnimator;
 
     [Header("Konfiguracja")]
     public string interactActionName = "Interact";
@@ -13,9 +18,11 @@ public class NPCInteraction2D : MonoBehaviour
     private bool isPlayerInRange = false;
     private InputAction interactAction;
 
+    [SerializeField] private PlayerInput playerInput;
+
     private void Awake()
     {
-        PlayerInput playerInput = FindFirstObjectByType<PlayerInput>();
+        //PlayerInput playerInput = FindFirstObjectByType<PlayerInput>();
         if (playerInput != null && playerInput.actions != null)
         {
             interactAction = playerInput.actions[interactActionName];
@@ -24,10 +31,21 @@ public class NPCInteraction2D : MonoBehaviour
         {
             Debug.LogError("Nie znaleziono komponentu PlayerInput na scenie!");
         }
+        player = FindFirstObjectByType<Player>();
+        if (player != null)
+        {
+            Debug.Log("Znaleziono komponent Player na scenie!");
+            playerAnimator = player.GetComponentInChildren<Animator>();
+        }
+        else
+        {
+            Debug.LogError("Nie znaleziono komponentu Player na scenie!");
+        }
     }
 
     private void OnEnable()
     {
+        
         if (interactAction != null)
         {
             interactAction.Enable();
@@ -36,11 +54,15 @@ public class NPCInteraction2D : MonoBehaviour
     }
 
     private void OnDisable()
-    {
+    {   
+        
         if (interactAction != null)
         {
             interactAction.performed -= OnInteractPerformed;
+            StopPlayer();
         }
+
+        
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -54,13 +76,12 @@ public class NPCInteraction2D : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        // Sprawdzamy tag, ale resetujemy też stan, żeby uniknąć zablokowania zmiennej
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = false;
-            if (shopPanel != null && shopPanel.activeSelf)
+            if (Panel != null && Panel.activeSelf)
             {
-                shopPanel.SetActive(false);
+                CloseMenu();
             }
             Debug.Log("Gracz opuścił strefę NPC.");
         }
@@ -68,18 +89,79 @@ public class NPCInteraction2D : MonoBehaviour
 
     private void OnInteractPerformed(InputAction.CallbackContext context)
     {
-        // KLUCZOWE: Sprawdzamy, czy gracz na pewno jest w strefie
         if (!isPlayerInRange) return;
 
-        if (shopPanel != null)
+        if (Panel != null && !Panel.activeSelf)
         {
-            bool isActive = shopPanel.activeSelf;
-            shopPanel.SetActive(!isActive);
-            Debug.Log("Przełączono stan panelu sklepu!");
+            
+            Panel.SetActive(true);
+            StopPlayer();
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+
+            Debug.Log("Otwarto panel!");
+
         }
         else
         {
             Debug.Log("Interakcja 2D działa! (Brak przypisanego panelu)");
+        }
+    }
+
+    public void CloseMenu()
+    {
+        if (Panel != null)
+        {
+            Panel.SetActive(false);
+            StartPlayer();
+
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+
+            Debug.Log("Zamknięto panel za pomocą przycisku UI!");
+        }
+    }
+
+    private void StopPlayer()
+    {
+        Debug.Log("Gracz zatrzymany");
+        if (playerInput != null)
+        {
+            playerInput.SwitchCurrentActionMap("UI");
+        }
+        if (player != null)
+        {
+            player.MovementStop();
+            player.AttackStop();
+            
+            Debug.Log("ruch gracza zatrzymany");
+        }
+
+        if(playerAnimator != null)
+        {
+            Debug.Log("Animacje gracza zatrzymane");
+            playerAnimator.SetBool("InPanel", true);
+            
+        }
+    }
+
+    private void StartPlayer()
+    {
+        if (playerInput != null)
+        {
+            playerInput.SwitchCurrentActionMap("Player");
+        }
+        if (player != null)
+        {
+            player.MovementStart();
+            player.AttackStart();
+            
+        }
+
+        if (playerAnimator != null)
+        {
+            
+            playerAnimator.SetBool("InPanel", false);
         }
     }
 }

@@ -13,6 +13,8 @@ public class Entity : MonoBehaviour
     [SerializeField] protected float maxHP;
     [SerializeField] protected float currentHP;
     [SerializeField] protected float DMG;
+
+    [SerializeField] protected float attackSpeed;
     [SerializeField] protected float DEF;
     [SerializeField] protected float SPEED;
 
@@ -20,6 +22,8 @@ public class Entity : MonoBehaviour
     public float MaxHp => maxHP; 
     public float CurrentHp => currentHP;
     public float Dmg => DMG;
+
+    public float AttackSpeed => attackSpeed;
     public float Def => DEF;
     public float Speed => SPEED;
 
@@ -96,10 +100,11 @@ public class Entity : MonoBehaviour
 
 
 
-    public void SetStats(float newMaxHp, float newDmg, float newSpeed, float newDef)
+    public void SetStats(float newMaxHp, float newDmg,float newAttackSpeed, float newSpeed, float newDef)
     {
         maxHP = newMaxHp;
         DMG = newDmg;
+        attackSpeed = newAttackSpeed;
         SPEED = newSpeed;
         DEF = newDef;
 

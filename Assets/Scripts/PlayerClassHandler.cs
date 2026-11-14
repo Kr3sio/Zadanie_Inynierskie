@@ -61,6 +61,7 @@ public class PlayerClassHandler :MonoBehaviour
         float totalHealthBonus = 0f;
         float totalSpeedBonus = 0f;
         float totalAttackBonus = 0f;
+        float totalAttackSpeedBonus = 0f;
         float totalDefensBonus = 0f;
 
         foreach(var node in unlockedNodes)
@@ -68,17 +69,20 @@ public class PlayerClassHandler :MonoBehaviour
             totalHealthBonus += node.MaxHPbonus;
             totalDefensBonus += node.DEFbonus;
             totalAttackBonus += node.DMGbonus;
+            totalAttackSpeedBonus += node.AttackSpeedbonus;
             totalSpeedBonus += node.SPEEDbonus;
         }
 
-        float weaponBonus = (currentWeapon != null) ? currentWeapon.baseDMG : 0f;
+        float weaponDMGBonus = (currentWeapon != null) ? currentWeapon.baseDMG : 0f;
+        float weaponAttackSpeedBonus = (currentWeapon != null) ? currentWeapon.attackSpeed : 0f;
 
         float finalMaxHp = currentClass.baseMaxHP + totalHealthBonus;
         float finalSpeed = currentClass.baseSPEED + totalSpeedBonus;
-        float finalDmg = currentClass.baseDMG + totalAttackBonus + weaponBonus;
+        float finalDmg = currentClass.baseDMG + totalAttackBonus + weaponDMGBonus;
+        float finalAttackSpeed = currentClass.baseAttackSpeed + totalAttackSpeedBonus * weaponAttackSpeedBonus;
         float finalDef = currentClass.baseDEF + totalDefensBonus;
 
-        player.SetStats(finalMaxHp, finalDmg, finalSpeed, finalDef);
+        player.SetStats(finalMaxHp, finalDmg,finalAttackSpeed, finalSpeed, finalDef);
     }
 
 

@@ -19,6 +19,7 @@ public class ClassUpgradeNode : ScriptableObject
     [Header("Stats bonuses")]
     public float MaxHPbonus;
     public float DMGbonus;
+    public float AttackSpeedbonus;
     public float DEFbonus;
     public float SPEEDbonus;
 

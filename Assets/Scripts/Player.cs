@@ -13,8 +13,8 @@ public class Player : Entity
 
     [Header("Class")]
     public PlayerClassHandler classHandler;
-    
 
+    private float nextAttackTime = 0f;
 
     //Dash
     
@@ -26,7 +26,7 @@ public class Player : Entity
 
     private bool canDash = true;
 
-    private bool isAttacking;
+    private bool canAttack = true;
 
     
 
@@ -52,7 +52,6 @@ public class Player : Entity
         
         base.Update();
         if (isDashing) return;
-        //HandleInput();
         
         HandleFlip();
     }
@@ -64,42 +63,9 @@ public class Player : Entity
         HandleMovement();
     }
 
-    //private void OnMove(InputValue value)
-    //{
-    //    movementInput = value.Get<Vector2>();
-    //    Debug.Log("Ruch: " + movementInput);
-    //}
+    
 
-    private void HandleInput()
-    {
-        if (Keyboard.current == null) return;
-
-        float moveX = 0;
-        float moveY = 0;
-
-        if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed) moveY = 1;
-        if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed) moveY = -1;
-        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) moveX = -1;
-        if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) moveX = 1;
-
-        movementInput = new Vector2(moveX, moveY).normalized;
-
-        if(movementInput != Vector2.zero)
-        {
-            lastNonZeroMovement = movementInput;
-            anim.SetBool("IsWalking", false);
-            anim.SetFloat("LastInputX", moveX);
-            anim.SetFloat("LastInputY", moveY);
-            UpdateAttackPointPosition();
-        }
-
-        
-
-       
-
-
-        
-    }
+    
 
     
 
@@ -187,24 +153,54 @@ public class Player : Entity
         }
     }
 
-    
+    public void AttackStop()
+    {
+        canAttack = false;
+    }
+
+    public void AttackStart()
+    {
+        canAttack = true;
+    }
 
     public void EndAttack()
     {
         canMove = true;
     }
 
+
+    public void MovementStart()
+    {
+        canMove = true;
+
+    }
+
+    public void MovementStop()
+    {
+        canMove = false;
+    }
+
     protected void OnAttack(InputValue value)
     {
-        if (value.isPressed)
+        if (canAttack != false)
         {
-            canMove = false;
-            if (anim != null)
+            if (value.isPressed && Time.time >= nextAttackTime)
             {
-                anim.SetTrigger("attack");
-
+                canMove = false;
+                Attack();
+                DamageTargets();
+                nextAttackTime = Time.time + (1f / Mathf.Max(attackSpeed, 0.01f));
             }
-            DamageTargets();
+        }
+    }
+
+    private void Attack()
+    {
+        if (anim != null)
+        {
+            anim.SetFloat("AttackSpeedMultiplayer", attackSpeed);
+            anim.SetTrigger("attack");
+            
         }
     }
 
