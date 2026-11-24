@@ -6,57 +6,73 @@ using System;
 public class BlacksmithUIController : MonoBehaviour
 {
 
-    [Header("Panels")]
-    [SerializeField] private GameObject unlockedContent;
-    [SerializeField] private GameObject shopContent;
+    //[Header("Panels")]
+    //[SerializeField] private GameObject unlockedContent;
+    //[SerializeField] private GameObject shopContent;
+    //[SerializeField] private GameObject classContent;
 
+    //[Header("Buttons")]
+    //[SerializeField] private Button unlockedButton;
+    //[SerializeField] private Button shopButton;
 
-    [Header("Buttons")]
-    [SerializeField] private Button unlockedButton;
-    [SerializeField] private Button shopButton;
-    [SerializeField] private Button exitButton;
+    
+    //[SerializeField] private Button exitButton;
 
-    [Header(" ")]
-    [SerializeField] private GameObject firstSelectedOnOpen;
+    //[Header(" ")]
+    //[SerializeField] private GameObject firstSelectedOnOpen;
 
 
     
 
 
-    private void OnEnable()
-    {
-        ShowUnlockedTab();
-    }
+    //private void OnEnable()
+    //{
+    //    ShowUnlockedTab();
+    //}
 
-    public void ShowUnlockedTab()
-    {
-        unlockedContent.SetActive(true);
-        shopContent.SetActive(false);
+    //public void ShowUnlockedTab()
+    //{
+    //    unlockedContent.SetActive(true);
+    //    shopContent.SetActive(false);
+    //    classContent.SetActive(false);
 
-        unlockedButton.interactable = false;
-        shopButton.interactable = true;
+    //    unlockedButton.interactable = false;
+    //    shopButton.interactable = true;
 
-        FocusFirstElement(unlockedButton.gameObject);
-    }
+    //    FocusFirstElement(unlockedButton.gameObject);
+    //}
 
-    public void ShowShopTab()
-    {
-        unlockedContent.SetActive(false);
-        shopContent.SetActive(true);
+    //public void ShowShopTab()
+    //{
+    //    unlockedContent.SetActive(false);
+    //    shopContent.SetActive(true);
+    //    classContent.SetActive(false);
 
-        unlockedButton.interactable = true;
-        shopButton.interactable = false;
+    //    unlockedButton.interactable = true;
+    //    shopButton.interactable = false;
 
-        FocusFirstElement(unlockedButton.gameObject);
-    }
+    //    FocusFirstElement(unlockedButton.gameObject);
+    //}
+    ////public void ShowShopTab()
+    ////{
+    ////    unlockedPanel.SetActive(false);
+    ////    shopPanel.SetActive(false);
+    ////    classPanel.SetActive(true);
+    ////    SelectFirstItemInContainer(classContentContainer);
 
-    private void FocusFirstElement(GameObject elementToSelect)
-    {
-        if (EventSystem.current != null)
-        {
+    ////    unlockedButton.interactable = true;
+    ////    shopButton.interactable = false;
 
-            EventSystem.current.SetSelectedGameObject(null);
-            EventSystem.current.SetSelectedGameObject(elementToSelect);
-        }
-    }
+    ////    FocusFirstElement(unlockedButton.gameObject);
+    ////}
+
+    //private void FocusFirstElement(GameObject elementToSelect)
+    //{
+    //    if (EventSystem.current != null)
+    //    {
+
+    //        EventSystem.current.SetSelectedGameObject(null);
+    //        EventSystem.current.SetSelectedGameObject(elementToSelect);
+    //    }
+    //}
 }

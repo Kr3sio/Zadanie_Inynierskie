@@ -16,6 +16,10 @@ public class WeaponData : ScriptableObject
 
     public string description;
 
+    public float attackRadius = 1.0f;
+
+    public float attackOffset = 1.0f;
+
 
 
     [Header("Wymagania klas")]

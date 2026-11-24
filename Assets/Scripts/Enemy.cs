@@ -48,7 +48,7 @@ public class Enemy : Entity
     protected override void HandleCollision()
     {
         base.HandleCollision();
-        playerDetected = Physics2D.OverlapCircle(attackPoint.position, attackRadious, whatIsTarget);
+        playerDetected = Physics2D.OverlapCircle(attackPoint.position, attackRadius, whatIsTarget);
     }
 
     protected override void Die()

@@ -9,6 +9,7 @@ public class CharacterClass : ScriptableObject
 {
     public string className;
     [TextArea] public string description;
+    public bool isUnlocked = false;
 
     [Header("Base Statistics")]
     public float baseMaxHP;

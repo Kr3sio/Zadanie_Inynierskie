@@ -63,6 +63,7 @@ public class PlayerClassHandler :MonoBehaviour
         float totalAttackBonus = 0f;
         float totalAttackSpeedBonus = 0f;
         float totalDefensBonus = 0f;
+        
 
         foreach(var node in unlockedNodes)
         {
@@ -136,7 +137,15 @@ public class PlayerClassHandler :MonoBehaviour
     public void EquipWeapon(WeaponData newWeapon)
     {
         currentWeapon = newWeapon;
+
+        if (currentWeapon != null)
+        {
+            player.SetAttackPoint(currentWeapon.attackRadius,currentWeapon.attackOffset);
+
+        }
+        
         RecalculatePlayerStats();
+        player.UpdateAttackPointPosition();
     }
 
     public bool EquipSpell(SpellData newSpell, int slotIndex)

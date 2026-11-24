@@ -35,6 +35,9 @@ public class Player : Entity
 
     private Vector2 lastNonZeroMovement = Vector2.down;
 
+
+    public int gold = 15;
+
     protected override void Awake()
     {
     base.Awake();
@@ -88,7 +91,7 @@ public class Player : Entity
         Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), false);
     }
 
-    private void UpdateAttackPointPosition()
+    public void UpdateAttackPointPosition()
     {
         if (attackPoint != null)
         {
@@ -144,7 +147,7 @@ public class Player : Entity
 
     public void DamageTargets()
     {
-        Collider2D[] enemyColliders = Physics2D.OverlapCircleAll(attackPoint.position, attackRadious, whatIsTarget);
+        Collider2D[] enemyColliders = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, whatIsTarget);
 
         foreach (Collider2D enemy in enemyColliders)
         {

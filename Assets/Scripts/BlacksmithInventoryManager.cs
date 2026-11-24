@@ -8,13 +8,12 @@ using System;
 public class BlacksmithInventoryManager : MonoBehaviour
 {
     [SerializeField] private List<WeaponData> allWeapons = new List<WeaponData>();
-
+    [SerializeField] private List<CharacterClass> allClass = new List<CharacterClass>();
 
     [Header("Referencje do kontenerów (content)")]
     [SerializeField] private Transform unlockedContentContainer;
     [SerializeField] private Transform shopContentContainer;
-
-
+    [SerializeField] private Transform classContentContainer;
 
     [Header("Prefab przedmiotu UI")]
     [SerializeField] private GameObject weaponUIPrefab;
@@ -23,9 +22,17 @@ public class BlacksmithInventoryManager : MonoBehaviour
     [SerializeField] private Button btnUnlocked;
     [SerializeField] private Button btnShop;
 
+    [SerializeField] private Button btnClass;
+
     [Header("Panele zakładek")]
     [SerializeField] private GameObject unlockedPanel;
     [SerializeField] private GameObject shopPanel;
+
+    [SerializeField] private GameObject classPanel;
+
+    [SerializeField] private GameObject ItemDetailsPanel;
+
+    [SerializeField] private GameObject ClassDetailsPanel;
 
     [Header("Panel Szczegółów")]
     [SerializeField] private TMP_Text detailsNameText;
@@ -35,6 +42,10 @@ public class BlacksmithInventoryManager : MonoBehaviour
     [SerializeField] private TMP_Text actionButtonText;
 
     private WeaponData currentlySelectedWeapon;
+
+    private CharacterClass currentlySelectedClass;
+
+    private PlayerClassHandler playerClassHandler;
 
 
     private void OnEnable()
@@ -49,6 +60,7 @@ public class BlacksmithInventoryManager : MonoBehaviour
 
         foreach (Transform child in unlockedContentContainer) Destroy(child.gameObject);
         foreach (Transform child in shopContentContainer) Destroy(child.gameObject);
+        foreach (Transform child in classContentContainer) Destroy(child.gameObject);
 
 
         foreach (var weapon in allWeapons)
@@ -64,6 +76,17 @@ public class BlacksmithInventoryManager : MonoBehaviour
                 newUIItem = Instantiate(weaponUIPrefab, shopContentContainer);
                 SetupItemButton(newUIItem, weapon);
             }
+        }
+
+        foreach (var characterClass in allClass)
+        {
+            
+             newUIItem = Instantiate(weaponUIPrefab, classContentContainer);
+             SetupClassButton(newUIItem, characterClass);
+
+            
+               
+            
         }
 
         SelectFirstAvailableWeapon();
@@ -92,6 +115,32 @@ public class BlacksmithInventoryManager : MonoBehaviour
         EventTrigger.Entry entry = new EventTrigger.Entry();
         entry.eventID = EventTriggerType.Select;
         entry.callback.AddListener((eventData) => { DisplayWeaponDetails(weapon); });
+        trigger.triggers.Add(entry);
+    }
+
+    private void SetupClassButton(GameObject uiItem, CharacterClass characterClass)
+    {
+        TMP_Text nameText = uiItem.transform.Find("NameText")?.GetComponent<TMP_Text>();
+        if (nameText) nameText.text = characterClass.className;
+
+        //Image iconImage = uiItem.transform.Find("Icon")?.GetComponent<Image>();
+        //if (iconImage) iconImage.sprite = class.classIcon;
+
+        Button btn = uiItem.GetComponent<Button>();
+        if (btn != null)
+        {
+            // Kliknięcie myszką / zatwierdzenie padem wybiera ten przedmiot do panelu szczegółów
+            btn.onClick.AddListener(() =>
+            {
+                DisplayClassDetails(characterClass);
+            });
+        }
+
+        // Obsługa fokusu dla pada (gdy gracz najeżdża padem na kafelek, automatycznie pokazuj jego statysty!)
+        EventTrigger trigger = uiItem.AddComponent<EventTrigger>();
+        EventTrigger.Entry entry = new EventTrigger.Entry();
+        entry.eventID = EventTriggerType.Select;
+        entry.callback.AddListener((eventData) => { DisplayClassDetails(characterClass); });
         trigger.triggers.Add(entry);
     }
 
@@ -129,10 +178,52 @@ public class BlacksmithInventoryManager : MonoBehaviour
         }
     }
 
+    public void DisplayClassDetails(CharacterClass clas)
+    {
+        currentlySelectedClass = clas;
+
+        if (detailsNameText) detailsNameText.text = clas.className;
+
+        if (detailsStatsText)
+        {
+            detailsStatsText.text = $"Puknty życia: {clas.baseMaxHP}\n" +
+                                    $"Obrażenia: {clas.baseDMG}\n" +
+                                    $"Prędkość ataku: {clas.baseAttackSpeed}\n" +
+                                    $"Obrona: {clas.baseDEF}\n" +
+                                    $"Szybkość: {clas.baseSPEED}\n";
+                                    
+        }
+
+        //if (detailsIconImage) detailsIconImage.sprite = clas.classIcon;
+
+        // Konfiguracja przycisku akcji (Załóż / Kup)
+        if (actionButton != null && actionButtonText != null)
+        {
+            actionButton.onClick.RemoveAllListeners();
+
+            if (clas.isUnlocked)
+            {
+                actionButtonText.text = "Użyj";
+                actionButton.onClick.AddListener(() => EquipClass(clas));
+            }
+            else
+            {
+                actionButtonText.text = "W użyciu";
+                
+            }
+        }
+    }
+
     private void EquipWeapon(WeaponData weapon)
     {
         Debug.Log("Założono broń: " + weapon.weaponName);
         // Tutaj dodaj logikę wyposażania postaci w tę broń
+    }
+
+    private void EquipClass(CharacterClass clas)
+    {
+        Debug.Log("Klasa w użyciu: " + clas.className);
+        playerClassHandler.InitializeClass(clas);
     }
 
     private void TryBuyWeapon(WeaponData weapon)
@@ -154,6 +245,9 @@ public class BlacksmithInventoryManager : MonoBehaviour
     {
         unlockedPanel.SetActive(true);
         shopPanel.SetActive(false);
+        classPanel.SetActive(false);
+        ItemDetailsPanel.SetActive(true);
+        ClassDetailsPanel.SetActive(false);
         SelectFirstItemInContainer(unlockedContentContainer);
     }
 
@@ -161,7 +255,20 @@ public class BlacksmithInventoryManager : MonoBehaviour
     {
         unlockedPanel.SetActive(false);
         shopPanel.SetActive(true);
+        classPanel.SetActive(false);
+        ItemDetailsPanel.SetActive(true);
+        ClassDetailsPanel.SetActive(false);
         SelectFirstItemInContainer(shopContentContainer);
+    }
+
+    public void OpenClassTab()
+    {
+        unlockedPanel.SetActive(false);
+        shopPanel.SetActive(false);
+        classPanel.SetActive(true);
+        ItemDetailsPanel.SetActive(false);
+        ClassDetailsPanel.SetActive(true);
+        SelectFirstItemInContainer(classContentContainer);
     }
 
     private void SelectFirstItemInContainer(Transform container)

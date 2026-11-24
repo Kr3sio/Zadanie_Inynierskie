@@ -33,12 +33,13 @@ public class Entity : MonoBehaviour
 
 
     [Header("Attack details")]
-    [SerializeField] protected float attackRadious;
+    [SerializeField] protected float attackRadius;
     [SerializeField] protected Transform attackPoint;
     [SerializeField] protected LayerMask whatIsTarget;
     [SerializeField] protected float attackOffset;
 
-
+    public float AttackOffset => attackOffset;
+    public float AttackRadius => attackRadius;
 
     protected bool canMove = true;
 
@@ -95,8 +96,18 @@ public class Entity : MonoBehaviour
     private void OnDrawGizmos()
     {
 
-        if (attackPoint != null) Gizmos.DrawWireSphere(attackPoint.position, attackRadious);
+        if (attackPoint != null) Gizmos.DrawWireSphere(attackPoint.position, attackRadius);
     }
+
+    public void SetAttackPoint(float radius,float offset)
+    {
+        attackRadius = radius;
+        attackOffset = offset;
+
+       
+    }
+
+    
 
 
 
